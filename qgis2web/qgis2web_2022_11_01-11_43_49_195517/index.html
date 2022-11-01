@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.wms.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/kommune_nordjylland_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:24, minZoom:1
+        }).fitBounds([[56.49510975449538,7.702296649823514],[57.79257045419057,11.723333293521323]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_Skrmkortgr_0');
+        map.getPane('pane_Skrmkortgr_0').style.zIndex = 400;
+        var layer_Skrmkortgr_0 = L.WMS.layer("https://api.dataforsyningen.dk/topo_skaermkort_DAF?token=66ba5eefddab48ebd9bfa7d92d45e452", "dtk_skaermkort_graa", {
+            pane: 'pane_Skrmkortgr_0',
+            format: 'image/jpeg',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            tiled: true,
+            info_format: 'text/html',
+            opacity: 1,
+            identify: false,
+            attribution: '',
+        });
+        map.addLayer(layer_Skrmkortgr_0);
+        function pop_kommune_nordjylland_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['gid'] !== null ? autolinker.link(feature.properties['gid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['feat_id'] !== null ? autolinker.link(feature.properties['feat_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['feat_kode'] !== null ? autolinker.link(feature.properties['feat_kode'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['feat_type'] !== null ? autolinker.link(feature.properties['feat_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['feat_sttxt'] !== null ? autolinker.link(feature.properties['feat_sttxt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['geom_sttxt'] !== null ? autolinker.link(feature.properties['geom_sttxt'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dagi_id'] !== null ? autolinker.link(feature.properties['dagi_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['areal'] !== null ? autolinker.link(feature.properties['areal'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['regionkode'] !== null ? autolinker.link(feature.properties['regionkode'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['regionnavn'] !== null ? autolinker.link(feature.properties['regionnavn'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['gyldig_fra'] !== null ? autolinker.link(feature.properties['gyldig_fra'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['gyldig_til'] !== null ? autolinker.link(feature.properties['gyldig_til'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['komkode'] !== null ? autolinker.link(feature.properties['komkode'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['komnavn'] !== null ? autolinker.link(feature.properties['komnavn'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_specifk'] !== null ? autolinker.link(feature.properties['dq_specifk'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_statem'] !== null ? autolinker.link(feature.properties['dq_statem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_descr'] !== null ? autolinker.link(feature.properties['dq_descr'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_process'] !== null ? autolinker.link(feature.properties['dq_process'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_respons'] !== null ? autolinker.link(feature.properties['dq_respons'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_posacpl'] !== null ? autolinker.link(feature.properties['dq_posacpl'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dq_posaclv'] !== null ? autolinker.link(feature.properties['dq_posaclv'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['timeof_cre'] !== null ? autolinker.link(feature.properties['timeof_cre'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['timeof_pub'] !== null ? autolinker.link(feature.properties['timeof_pub'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['timeof_rev'] !== null ? autolinker.link(feature.properties['timeof_rev'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['timeof_exp'] !== null ? autolinker.link(feature.properties['timeof_exp'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_kommune_nordjylland_1_0() {
+            return {
+                pane: 'pane_kommune_nordjylland_1',
+                opacity: 1,
+                color: 'rgba(215,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_kommune_nordjylland_1');
+        map.getPane('pane_kommune_nordjylland_1').style.zIndex = 401;
+        map.getPane('pane_kommune_nordjylland_1').style['mix-blend-mode'] = 'normal';
+        var layer_kommune_nordjylland_1 = new L.geoJson(json_kommune_nordjylland_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_kommune_nordjylland_1',
+            layerName: 'layer_kommune_nordjylland_1',
+            pane: 'pane_kommune_nordjylland_1',
+            onEachFeature: pop_kommune_nordjylland_1,
+            style: style_kommune_nordjylland_1_0,
+        });
+        bounds_group.addLayer(layer_kommune_nordjylland_1);
+        map.addLayer(layer_kommune_nordjylland_1);
+        setBounds();
+        </script>
+    </body>
+</html>
